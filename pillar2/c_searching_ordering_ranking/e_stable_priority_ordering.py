@@ -14,4 +14,14 @@ Thinking goal: use Python's stable sort intentionally and preserve meaningful or
 
 
 def order_tasks(tasks: list[dict]) -> list[dict]:
-    pass
+    return sorted(
+        tasks,
+        key= lambda task: task["priority"],
+        reverse=True
+    )
+
+
+# Time: O(n log n)
+# Extra space: O(n)
+# Sorting is the main cost, and Python's stable sorted() preserves the
+# original order of tasks with equal priorities while returning a new list.
