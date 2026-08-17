@@ -4,6 +4,9 @@ from pillar2.c_searching_ordering_ranking.b_binary_search import binary_search
 from pillar2.c_searching_ordering_ranking.c_manual_min_max import min_max
 from pillar2.c_searching_ordering_ranking.d_compound_key_sorting import (
     sort_scores)
+from pillar2.c_searching_ordering_ranking.e_stable_priority_ordering import (
+    order_tasks,
+)
 
 
 def test_linear_search_returns_first_occurrence():
@@ -94,3 +97,43 @@ def test_sort_scores_breaks_score_ties_by_name():
     scores = {"Zoe": 8, "amy": 10, "Bob": 10}
     result = sort_scores(scores)
     assert result == [("amy", 10), ("Bob", 10), ("Zoe", 8)]
+
+
+# Test for drill e_stable_priority_ordering.py
+
+
+def test_order_tasks_sorts_by_priority_descending():
+    tasks = [
+        {"name": "low", "priority": 1},
+        {"name": "high", "priority": 5},
+        {"name": "medium", "priority": 3},
+    ]
+
+    result = order_tasks(tasks)
+
+    assert [task["name"] for task in result] == ["high", "medium", "low"]
+
+
+def test_order_tasks_preserves_order_of_equal_priorities():
+    tasks = [
+        {"name": "first", "priority": 2},
+        {"name": "high", "priority": 5},
+        {"name": "second", "priority": 2},
+    ]
+
+    result = order_tasks(tasks)
+
+    assert [task["name"] for task in result] == ["high", "first", "second"]
+
+
+def test_order_tasks_returns_new_list_with_same_task_objects():
+    first = {"name": "first", "priority": 1}
+    second = {"name": "second", "priority": 2}
+    tasks = [first, second]
+
+    result = order_tasks(tasks)
+
+    assert result is not tasks
+    assert result == [second, first]
+    assert result[0] is second
+    assert result[1] is first
