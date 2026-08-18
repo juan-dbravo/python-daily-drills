@@ -16,4 +16,29 @@ Thinking goal: separate aggregation from ranking and specify deterministic ties.
 
 
 def leaderboard(events: list[dict]) -> list[tuple[str, int]]:
-    pass
+    totals = {}
+
+    for event in events:
+        player = event["player"].strip().lower()
+        points = event["points"]
+
+        totals[player] = totals.get(player, 0) + points
+
+    result = list(totals.items())
+    result.sort(key=lambda pair: (-pair[1], pair[0]))
+
+    return result
+
+
+
+events = [
+    {"player": "Matthew", "points": 10},
+    {"player": "Mary", "points": 15},
+    {"player": "MATTHEW", "points": 8},
+    {"player": "John", "points": 12},
+    {"player": "mary", "points": 5},
+    {"player": "Peter", "points": 7},
+]
+
+
+print(leaderboard(events))
