@@ -16,4 +16,18 @@ Thinking goal: understand the simple baseline before optimizing selection.
 
 
 def top_k_items(counts: dict[str, int], k: int) -> list[tuple[str, int]]:
-    pass
+    result = []
+
+    if k <= 0:
+        return result
+    
+    result = list(counts.items())
+    result.sort(key=lambda pair: (-pair[1], pair[0]))
+
+    return result[0:k]
+
+
+# Time: O(n log n) because all n dictionary items are fully sorted.
+# Extra space: O(n) because the items are copied into a new list before sorting.
+
+
