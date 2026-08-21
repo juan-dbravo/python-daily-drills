@@ -14,6 +14,15 @@ main cost and why your chosen data structure or pattern fits the problem.
 Thinking goal: optimize only after preserving the original behavioral contract.
 """
 
+from heapq import nsmallest
 
-def top_k_items_heap(counts: dict[str, int], k: int) -> list[tuple[str, int]]:
-    pass
+def top_k_items_heap(
+    counts: dict[str, int], k: int
+) -> list[tuple[str, int]]:
+    if k <= 0:
+        return []
+
+    items = counts.items()
+    print(items)
+
+    return nsmallest(k, items, key=lambda pair: (-pair[1], pair[0]))
