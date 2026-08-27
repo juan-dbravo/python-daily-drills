@@ -23,6 +23,11 @@ def top_k_items_heap(
         return []
 
     items = counts.items()
-    print(items)
+    return nsmallest(
+        k,
+        items,
+        key=lambda pair: (-pair[1], pair[0])
+    )
 
-    return nsmallest(k, items, key=lambda pair: (-pair[1], pair[0]))
+# Time: O(n log k + k log k); extra space: O(k).
+# A size-k heap avoids sorting all n items when k is much smaller than n.
