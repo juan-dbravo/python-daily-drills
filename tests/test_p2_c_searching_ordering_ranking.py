@@ -9,6 +9,7 @@ from pillar2.c_searching_ordering_ranking.e_stable_priority_ordering import (
 from pillar2.c_searching_ordering_ranking.f_leaderboard_ranking import (
     leaderboard)
 from pillar2.c_searching_ordering_ranking.g_top_k_full_sort import top_k_items
+from pillar2.c_searching_ordering_ranking.h_top_k_heap import top_k_items_heap
 
 
 # Test for a_linear_search.py
@@ -213,3 +214,28 @@ def test_top_k_items_returns_all_items_when_k_exceeds_size():
         ("a", 2),
     ]
 
+
+# Tests for drill h_top_k_heap.py
+
+def test_top_k_items_heap_orders_by_count_then_item_without_mutating_input():
+    counts = {"bob": 5, "alice": 5, "zoe": 8, "sam": 2}
+    original = counts.copy()
+
+    assert top_k_items_heap(counts, 3) == [
+        ("zoe", 8),
+        ("alice", 5),
+        ("bob", 5),
+    ]
+    assert counts == original
+
+
+@pytest.mark.parametrize("k", [0, -1])
+def test_top_k_items_heap_returns_empty_list_for_non_positive_k(k):
+    assert top_k_items_heap({"a": 3}, k) == []
+
+
+def test_top_k_items_heap_returns_all_items_when_k_exceeds_size():
+    assert top_k_items_heap({"a": 2, "b": 4}, 10) == [
+        ("b", 4),
+        ("a", 2),
+    ]
