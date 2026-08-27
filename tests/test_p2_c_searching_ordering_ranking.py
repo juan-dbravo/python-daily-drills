@@ -5,10 +5,13 @@ from pillar2.c_searching_ordering_ranking.c_manual_min_max import min_max
 from pillar2.c_searching_ordering_ranking.d_compound_key_sorting import (
     sort_scores)
 from pillar2.c_searching_ordering_ranking.e_stable_priority_ordering import (
-    order_tasks,
-)
-from pillar2.c_searching_ordering_ranking.f_leaderboard_ranking import leaderboard
+    order_tasks)
+from pillar2.c_searching_ordering_ranking.f_leaderboard_ranking import (
+    leaderboard)
+from pillar2.c_searching_ordering_ranking.g_top_k_full_sort import top_k_items
 
+
+# Test for a_linear_search.py
 
 def test_linear_search_returns_first_occurrence():
     assert linear_search([2, 4, 6, 8, 6], 6) == 2
@@ -183,3 +186,30 @@ def test_leaderboard_breaks_point_ties_by_player_name():
 
 def test_leaderboard_returns_empty_list_for_empty_input():
     assert leaderboard([]) == []
+
+
+# Tests for drill g_top_k_full_sort.py
+
+def test_top_k_items_orders_by_count_then_item_without_mutating_input():
+    counts = {"bob": 5, "alice": 5, "zoe": 8, "sam": 2}
+    original = counts.copy()
+
+    assert top_k_items(counts, 3) == [
+        ("zoe", 8),
+        ("alice", 5),
+        ("bob", 5),
+    ]
+    assert counts == original
+
+
+@pytest.mark.parametrize("k", [0, -1])
+def test_top_k_items_returns_empty_list_for_non_positive_k(k):
+    assert top_k_items({"a": 3}, k) == []
+
+
+def test_top_k_items_returns_all_items_when_k_exceeds_size():
+    assert top_k_items({"a": 2, "b": 4}, 10) == [
+        ("b", 4),
+        ("a", 2),
+    ]
+
