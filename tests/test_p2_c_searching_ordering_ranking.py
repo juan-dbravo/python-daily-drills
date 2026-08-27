@@ -7,6 +7,7 @@ from pillar2.c_searching_ordering_ranking.d_compound_key_sorting import (
 from pillar2.c_searching_ordering_ranking.e_stable_priority_ordering import (
     order_tasks,
 )
+from pillar2.c_searching_ordering_ranking.f_leaderboard_ranking import leaderboard
 
 
 def test_linear_search_returns_first_occurrence():
@@ -137,3 +138,48 @@ def test_order_tasks_returns_new_list_with_same_task_objects():
     assert result == [second, first]
     assert result[0] is second
     assert result[1] is first
+
+
+def test_order_tasks_returns_empty_list_for_empty_input():
+    assert order_tasks([]) == []
+
+
+def test_order_tasks_handles_negative_priorities():
+    tasks = [
+        {"name": "lowest", "priority": -5},
+        {"name": "highest", "priority": 0},
+        {"name": "middle", "priority": -2},
+    ]
+
+    assert [task["name"] for task in order_tasks(tasks)] == [
+        "highest",
+        "middle",
+        "lowest",
+    ]
+
+
+# Test for drill f_leaderboard_ranking.py
+
+
+def test_leaderboard_normalizes_and_aggregates_player_names():
+    events = [
+        {"player": " Alice ", "points": 4},
+        {"player": "ALICE", "points": 6},
+        {"player": "Bob", "points": 7},
+    ]
+
+    assert leaderboard(events) == [("alice", 10), ("bob", 7)]
+
+
+def test_leaderboard_breaks_point_ties_by_player_name():
+    events = [
+        {"player": "zoe", "points": 8},
+        {"player": "Amy", "points": 8},
+        {"player": "bob", "points": 8},
+    ]
+
+    assert leaderboard(events) == [("amy", 8), ("bob", 8), ("zoe", 8)]
+
+
+def test_leaderboard_returns_empty_list_for_empty_input():
+    assert leaderboard([]) == []
